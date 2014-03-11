@@ -6,6 +6,20 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		B0C5D10518CCDDAF004EE58C /* Universal */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = B0C5D10818CCDDAF004EE58C /* Build configuration list for PBXAggregateTarget "Universal" */;
+			buildPhases = (
+				B0C5D10918CCDDC4004EE58C /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = Universal;
+			productName = Universal;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		092DBB2917E4A4280089FC55 /* NilValuesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 092DBB2817E4A4280089FC55 /* NilValuesTests.m */; };
 		09739F2C16900E81009851EF /* AFNetworkingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 09739F2B16900E81009851EF /* AFNetworkingTests.m */; };
@@ -365,9 +379,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		09793578161B6251006DB5D5 /* OHHTTPStubs iOS */ = {
+		09793578161B6251006DB5D5 /* OHHTTPStubs */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 09793587161B6251006DB5D5 /* Build configuration list for PBXNativeTarget "OHHTTPStubs iOS" */;
+			buildConfigurationList = 09793587161B6251006DB5D5 /* Build configuration list for PBXNativeTarget "OHHTTPStubs" */;
 			buildPhases = (
 				09793575161B6251006DB5D5 /* Sources */,
 				09793576161B6251006DB5D5 /* Frameworks */,
@@ -377,7 +391,7 @@
 			);
 			dependencies = (
 			);
-			name = "OHHTTPStubs iOS";
+			name = OHHTTPStubs;
 			productName = OHHTTPStubs;
 			productReference = 09793579161B6251006DB5D5 /* libOHHTTPStubs.a */;
 			productType = "com.apple.product-type.library.static";
@@ -461,10 +475,11 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				09793578161B6251006DB5D5 /* OHHTTPStubs iOS */,
+				09793578161B6251006DB5D5 /* OHHTTPStubs */,
 				098368CD168FC7920082B1A4 /* OHHTTPStubs iOS Tests */,
 				27CE42E3184CD21D00484665 /* OHHTTPStubs Mac */,
 				27CE42F8184CD21D00484665 /* OHHTTPStubs Mac Tests */,
+				B0C5D10518CCDDAF004EE58C /* Universal */,
 			);
 		};
 /* End PBXProject section */
@@ -512,6 +527,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"";
+		};
+		B0C5D10918CCDDC4004EE58C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# define output folder environment variable\nUNIVERSAL_OUTPUTFOLDER=${BUILD_DIR}/${CONFIGURATION}-universal\n\n# Step 1. Build Device and Simulator versions\nxcodebuild -target OHHTTPStubs ONLY_ACTIVE_ARCH=NO -configuration ${CONFIGURATION} -sdk iphoneos  BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\nxcodebuild -target OHHTTPStubs -configuration ${CONFIGURATION} -sdk iphonesimulator -arch i386 BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\n# make sure the output directory exists\nmkdir -p \"${UNIVERSAL_OUTPUTFOLDER}\"\n\n# Step 2. Create universal binary file using lipo\nlipo -create -output \"${UNIVERSAL_OUTPUTFOLDER}/lib${PROJECT_NAME}.a\" \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/lib${PROJECT_NAME}.a\" \"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/lib${PROJECT_NAME}.a\"\n\n# Last touch. copy the header files. Just for convenience\ncp -R \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/include\" \"${UNIVERSAL_OUTPUTFOLDER}/\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -842,6 +870,20 @@
 			};
 			name = Release;
 		};
+		B0C5D10618CCDDAF004EE58C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		B0C5D10718CCDDAF004EE58C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -854,7 +896,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		09793587161B6251006DB5D5 /* Build configuration list for PBXNativeTarget "OHHTTPStubs iOS" */ = {
+		09793587161B6251006DB5D5 /* Build configuration list for PBXNativeTarget "OHHTTPStubs" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				09793588161B6251006DB5D5 /* Debug */,
@@ -889,6 +931,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		B0C5D10818CCDDAF004EE58C /* Build configuration list for PBXAggregateTarget "Universal" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B0C5D10618CCDDAF004EE58C /* Debug */,
+				B0C5D10718CCDDAF004EE58C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
